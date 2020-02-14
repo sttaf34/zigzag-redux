@@ -30,6 +30,7 @@ module.exports = {
     "no-console": "off",
     "react/jsx-filename-extension": ["error", { "extensions": [".tsx"] } ],
     "prettier/prettier": ["error", { "semi": false } ],
+    "import/prefer-default-export": "off",
 
     // https://stackoverflow.com/questions/59265981/typescript-eslint-missing-file-extension-ts-import-extensions
     "import/extensions": [

@@ -1,11 +1,12 @@
 import * as React from "react"
-import Counter from "./container/Counter"
+import { WordList } from "./components/WordList"
+import { Board } from "./components/Board"
 
 const App = (): JSX.Element => {
   return (
     <>
-      <p>Hello, Redux!</p>
-      <Counter />
+      <WordList />
+      <Board />
     </>
   )
 }
