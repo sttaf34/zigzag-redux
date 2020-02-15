@@ -1,11 +1,21 @@
 import * as React from "react"
+import Char from "../containers/Char"
 
-const createLi = (word: string, pointIndex: number | null): JSX.Element => {
+const createWordLi = (
+  word: string,
+  selectedCharIndex: number | null
+): JSX.Element => {
   const row = Array.from(word).map((char: string, index: number) => {
-    if (index === pointIndex) {
-      return <em>{char}</em>
+    if (index === selectedCharIndex) {
+      return (
+        <>
+          <span style={{ border: "1px solid red" }}>
+            <Char label={word[index]} ownWordIndex={0} ownCharIndex={0} />
+          </span>
+        </>
+      )
     }
-    return <span>{char}</span>
+    return <Char label={word[index]} ownWordIndex={0} ownCharIndex={0} />
   })
   return <li>{row}</li>
 }
@@ -25,9 +35,9 @@ export const WordList: React.FC = () => {
 
   const lis = words.map((word: string, index: number) => {
     if (index === blockIndex) {
-      return createLi(word, pointIndex)
+      return createWordLi(word, pointIndex)
     }
-    return createLi(word, null)
+    return createWordLi(word, null)
   })
 
   return <ul>{lis}</ul>
