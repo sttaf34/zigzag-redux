@@ -1,19 +1,32 @@
-import { WordCharIndex } from "../others/types"
+import { WordListIndex, BoardIndex } from "../others/types"
 
-export enum CharActionType {
-  SELECT = "CHAR/SELECT"
+export enum GameActionType {
+  TAP_WORDLIST = "GAME/TAP_WORDLIST",
+  TAP_BOARD = "GAME/TAP_BOARD"
 }
 
-export interface CharAction {
-  type: CharActionType
+export interface GameAction {
+  type: GameActionType
   payload: {
-    selectedIndex: WordCharIndex
+    selectedWordListIndex: WordListIndex | null
+    boardIndex: BoardIndex | null
   }
 }
 
-export const select = (selectedIndex: WordCharIndex): CharAction => ({
-  type: CharActionType.SELECT,
+export const tapWordList = (
+  selectedWordListIndex: WordListIndex
+): GameAction => ({
+  type: GameActionType.TAP_WORDLIST,
   payload: {
-    selectedIndex
+    selectedWordListIndex,
+    boardIndex: null
+  }
+})
+
+export const tapBoard = (boardIndex: BoardIndex): GameAction => ({
+  type: GameActionType.TAP_BOARD,
+  payload: {
+    selectedWordListIndex: null,
+    boardIndex
   }
 })

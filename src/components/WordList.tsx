@@ -1,44 +1,64 @@
 import * as React from "react"
-import Char from "../containers/Char"
 
-const createWordLi = (
-  word: string,
-  selectedCharIndex: number | null
-): JSX.Element => {
-  const row = Array.from(word).map((char: string, index: number) => {
-    if (index === selectedCharIndex) {
-      return (
-        <>
-          <span style={{ border: "1px solid red" }}>
-            <Char label={word[index]} ownWordIndex={0} ownCharIndex={0} />
-          </span>
-        </>
-      )
-    }
-    return <Char label={word[index]} ownWordIndex={0} ownCharIndex={0} />
-  })
-  return <li>{row}</li>
+import WordListChar from "../containers/WordListChar"
+import { WordListIndex } from "../others/types"
+import { store } from "../others/store"
+
+interface State {
+  selectedIndex: WordListIndex
 }
 
-export const WordList: React.FC = () => {
-  const words = ["共同募金", "同音異義", "金権体質", "義理人情", "質実剛健"]
+export class WordList extends React.Component<{}, State> {
+  public constructor(props) {
+    super(props)
+    this.state = { selectedIndex: store.getState().selectedWordListIndex }
 
-  const state = {
-    selected: {
-      blockIndex: 2,
-      pointIndex: 3
-    }
+    store.subscribe(() => {
+      this.setState({
+        selectedIndex: store.getState().selectedWordListIndex
+      })
+    })
   }
 
-  const { selected } = state
-  const { blockIndex, pointIndex } = selected
+  private createWord = (
+    word: string,
+    ownWordIndex: number,
+    selectedIndex: WordListIndex
+  ): JSX.Element => {
+    const row = Array.from(word).map((char: string, index: number) => {
+      const selectedWordIndex = selectedIndex.word
+      const selectedCharIndex = selectedIndex.char
+      const key = `${ownWordIndex}_${index}`
+      if (ownWordIndex === selectedWordIndex && index === selectedCharIndex) {
+        return (
+          <WordListChar
+            label={char}
+            ownWordIndex={ownWordIndex}
+            ownCharIndex={index}
+            key={key}
+          />
+        )
+      }
+      return (
+        <WordListChar
+          label={char}
+          ownWordIndex={ownWordIndex}
+          ownCharIndex={index}
+          key={key}
+        />
+      )
+    })
+    return <>{row}</>
+  }
 
-  const lis = words.map((word: string, index: number) => {
-    if (index === blockIndex) {
-      return createWordLi(word, pointIndex)
-    }
-    return createWordLi(word, null)
-  })
+  public render(): JSX.Element {
+    const words = ["共同募金", "同音異義", "金権体質", "義理人情", "質実剛健"]
 
-  return <ul>{lis}</ul>
+    const { selectedIndex } = this.state
+    const lis = words.map((word: string, ownWordIndex: number) => {
+      const wordElement = this.createWord(word, ownWordIndex, selectedIndex)
+      return <li key={String(ownWordIndex)}>{wordElement}</li>
+    })
+    return <ul>{lis}</ul>
+  }
 }

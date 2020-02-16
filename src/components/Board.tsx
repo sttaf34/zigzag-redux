@@ -1,51 +1,66 @@
-/* eslint-disable no-restricted-syntax */
 import * as React from "react"
 
-// export interface CounterProps {
-//   count: number
-//   increment: () => void
-//   decrement: () => void
-// }
+import BoardChar from "../containers/BoardChar"
+import { BoardIndex } from "../others/types"
+import { store } from "../others/store"
 
-const createRow = (chars: string[]): JSX.Element => {
-  const tds = chars.map((char: string) => <td>{char}</td>)
-  return <tr>{tds}</tr>
+interface State {
+  wordList: (BoardIndex | null)[][]
 }
 
-export const Board: React.FC = () => {
-  const X_MAX = 3
-  const Y_MAX = 3
-  const WORD_SIZE = 4
-  const words = ["共同募金", "同音異義", "金権体質", "義理人情", "質実剛健"]
+export class Board extends React.Component<{}, State> {
+  public constructor(props) {
+    super(props)
+    this.state = { wordList: store.getState().wordList }
 
-  const state = {
-    blocks: [
-      [{ x: 0, y: 0 }, null, null, null],
-      [{ x: 1, y: 0 }, null, null, null],
-      [{ x: 2, y: 1 }, null, null, null],
-      [{ x: 3, y: 1 }, null, null, null],
-      [{ x: 1, y: 3 }, null, null, null]
-    ]
+    store.subscribe(() => {
+      this.setState({
+        wordList: store.getState().wordList
+      })
+    })
   }
 
-  // board -> wordsとstateからHTMLを組み立てるのに便利な形に変換したもの
-  const row0 = Array<string>(4).fill("")
-  const row1 = Array<string>(4).fill("")
-  const row2 = Array<string>(4).fill("")
-  const row3 = Array<string>(4).fill("")
-  const board = [row0, row1, row2, row3]
+  private createRow = (chars: string[], ownXIndex: number): JSX.Element => {
+    const tds = chars.map((char: string, index: number) => {
+      const key = `${ownXIndex}_${index}`
+      return (
+        <td key={key}>
+          <BoardChar label={char} ownXIndex={ownXIndex} ownYIndex={index} />
+        </td>
+      )
+    })
+    return <>{tds}</>
+  }
 
-  const { blocks } = state
-  for (let blockIndex = 0; blockIndex < blocks.length; blockIndex += 1) {
-    for (let pointIndex = 0; pointIndex < WORD_SIZE; pointIndex += 1) {
-      const point = blocks[blockIndex][pointIndex]
-      if (point !== null) {
-        board[point.x][point.y] = words[blockIndex][pointIndex]
+  public render(): JSX.Element {
+    const X_MAX = 3
+    const Y_MAX = 3
+    const WORD_SIZE = 4
+    const words = ["共同募金", "同音異義", "金権体質", "義理人情", "質実剛健"]
+    const { wordList } = this.state
+
+    const board = Array.from({ length: X_MAX + 1 }, () =>
+      Array<string>(Y_MAX + 1).fill("")
+    )
+    for (let i = 0; i < wordList.length; i += 1) {
+      for (let j = 0; j < WORD_SIZE; j += 1) {
+        const boardIndex = wordList[i][j]
+        if (boardIndex !== null) {
+          board[boardIndex.x][boardIndex.y] = words[i][j]
+        }
       }
     }
-  }
 
-  const trs = board.map((row: string[]) => createRow(row))
-  const table = <table>{trs}</table>
-  return <>{table}</>
+    const trs = board.map((row: string[], ownXIndex: number) => {
+      const element = this.createRow(row, ownXIndex)
+      return <tr key={String(ownXIndex)}>{element}</tr>
+    })
+    return (
+      <>
+        <table>
+          <tbody>{trs}</tbody>
+        </table>
+      </>
+    )
+  }
 }
