@@ -2,8 +2,8 @@ import { connect } from "react-redux"
 import { Dispatch } from "redux"
 
 import { GameAction, tapWordList } from "../actions"
-import { WordListChar } from "../components/WordListChar"
-import { WordListIndex } from "../others/types"
+import { BlockListChar } from "../components/BlockListChar"
+import { BlockListIndex } from "../others/types"
 
 interface StateProps {
   label: string
@@ -22,12 +22,12 @@ const mapStateToProps = (_, ownProps: OwnProps): StateProps => {
 }
 
 interface DispatchProps {
-  tapWordList: (newSelectedIndex: WordListIndex) => void
+  tapWordList: (newSelectedIndex: BlockListIndex) => void
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => ({
-  tapWordList: (newSelectedIndex: WordListIndex): GameAction =>
+  tapWordList: (newSelectedIndex: BlockListIndex): GameAction =>
     dispatch(tapWordList(newSelectedIndex))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(WordListChar)
+export default connect(mapStateToProps, mapDispatchToProps)(BlockListChar)

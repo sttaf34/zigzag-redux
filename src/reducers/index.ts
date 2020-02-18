@@ -1,10 +1,10 @@
 import { Reducer } from "redux"
 import { GameAction, GameActionType } from "../actions"
-import { WordListIndex, BoardIndex } from "../others/types"
+import { BlockListIndex, BoardIndex } from "../others/types"
 
 export interface GameState {
-  selectedWordListIndex: WordListIndex
-  wordList: (BoardIndex | null)[][]
+  selectedBlockListIndex: BlockListIndex
+  blockListIndexes: (BoardIndex | null)[][]
 }
 
 const isNotNull = <T>(item: T | null): item is T => {
@@ -16,7 +16,9 @@ const reduceOnTapBoard = (
   tappedBoardIndex: BoardIndex
 ): GameState => {
   // tappedBoardIndex が空いてるかどうかのチェック
-  const boardIndexes = Array<BoardIndex | null>().concat(...state.wordList)
+  const boardIndexes = Array<BoardIndex | null>().concat(
+    ...state.blockListIndexes
+  )
   const noNullBoardIndexes = boardIndexes.filter(isNotNull)
   const isEmptyOnBoard = noNullBoardIndexes.some(boardIndex => {
     return (
@@ -31,13 +33,13 @@ const reduceOnTapBoard = (
 
   // 空いているので埋める
   const {
-    selectedWordListIndex: { word, char }
+    selectedBlockListIndex: { block, char }
   } = state
-  const copiedWordList = [...state.wordList]
-  copiedWordList[word][char] = tappedBoardIndex
+  const copiedWordList = [...state.blockListIndexes]
+  copiedWordList[block][char] = tappedBoardIndex
   return {
     ...state,
-    wordList: copiedWordList
+    blockListIndexes: copiedWordList
   }
 }
 
@@ -46,19 +48,19 @@ const gameReducer: Reducer<GameState, GameAction> = (
   action: GameAction
 ): GameState => {
   switch (action.type) {
-    case GameActionType.TAP_WORDLIST:
-      if (action.payload.selectedWordListIndex === null) {
+    case GameActionType.TAP_BLOCKLIST:
+      if (action.payload.selectedBlockListIndex === null) {
         return state
       }
       return {
-        selectedWordListIndex: action.payload.selectedWordListIndex,
-        wordList: state.wordList
+        selectedBlockListIndex: action.payload.selectedBlockListIndex,
+        blockListIndexes: state.blockListIndexes
       }
     case GameActionType.TAP_BOARD:
-      if (action.payload.boardIndex === null) {
+      if (action.payload.tappedBoardIndex === null) {
         return state
       }
-      return reduceOnTapBoard(state, action.payload.boardIndex)
+      return reduceOnTapBoard(state, action.payload.tappedBoardIndex)
     default:
       return state
   }

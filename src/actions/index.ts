@@ -1,32 +1,32 @@
-import { WordListIndex, BoardIndex } from "../others/types"
+import { BlockListIndex, BoardIndex } from "../others/types"
 
 export enum GameActionType {
-  TAP_WORDLIST = "GAME/TAP_WORDLIST",
+  TAP_BLOCKLIST = "GAME/TAP_BLOCKLIST",
   TAP_BOARD = "GAME/TAP_BOARD"
 }
 
 export interface GameAction {
   type: GameActionType
   payload: {
-    selectedWordListIndex: WordListIndex | null
-    boardIndex: BoardIndex | null
+    selectedBlockListIndex: BlockListIndex | null
+    tappedBoardIndex: BoardIndex | null
   }
 }
 
 export const tapWordList = (
-  selectedWordListIndex: WordListIndex
+  selectedBlockListIndex: BlockListIndex
 ): GameAction => ({
-  type: GameActionType.TAP_WORDLIST,
+  type: GameActionType.TAP_BLOCKLIST,
   payload: {
-    selectedWordListIndex,
-    boardIndex: null
+    selectedBlockListIndex,
+    tappedBoardIndex: null
   }
 })
 
-export const tapBoard = (boardIndex: BoardIndex): GameAction => ({
+export const tapBoard = (tappedBoardIndex: BoardIndex): GameAction => ({
   type: GameActionType.TAP_BOARD,
   payload: {
-    selectedWordListIndex: null,
-    boardIndex
+    selectedBlockListIndex: null,
+    tappedBoardIndex
   }
 })

@@ -1,21 +1,24 @@
 import * as React from "react"
 
-import WordListChar from "../containers/WordListChar"
-import { WordListIndex } from "../others/types"
+import BlockListChar from "../containers/BlockListChar"
+import { BlockListIndex } from "../others/types"
 import { store } from "../others/store"
+import { question1 } from "../others/questions"
 
 interface State {
-  selectedIndex: WordListIndex
+  selectedBlockListIndex: BlockListIndex
 }
 
-export class WordList extends React.Component<{}, State> {
+export class BlockList extends React.Component<{}, State> {
   public constructor(props) {
     super(props)
-    this.state = { selectedIndex: store.getState().selectedWordListIndex }
+    this.state = {
+      selectedBlockListIndex: store.getState().selectedBlockListIndex
+    }
 
     store.subscribe(() => {
       this.setState({
-        selectedIndex: store.getState().selectedWordListIndex
+        selectedBlockListIndex: store.getState().selectedBlockListIndex
       })
     })
   }
@@ -23,15 +26,15 @@ export class WordList extends React.Component<{}, State> {
   private createWord = (
     word: string,
     ownWordIndex: number,
-    selectedIndex: WordListIndex
+    selectedBlockListIndex: BlockListIndex
   ): JSX.Element => {
     const row = Array.from(word).map((char: string, index: number) => {
-      const selectedWordIndex = selectedIndex.word
-      const selectedCharIndex = selectedIndex.char
+      const selectedWordIndex = selectedBlockListIndex.block
+      const selectedCharIndex = selectedBlockListIndex.char
       const key = `${ownWordIndex}_${index}`
       if (ownWordIndex === selectedWordIndex && index === selectedCharIndex) {
         return (
-          <WordListChar
+          <BlockListChar
             label={char}
             ownWordIndex={ownWordIndex}
             ownCharIndex={index}
@@ -40,7 +43,7 @@ export class WordList extends React.Component<{}, State> {
         )
       }
       return (
-        <WordListChar
+        <BlockListChar
           label={char}
           ownWordIndex={ownWordIndex}
           ownCharIndex={index}
@@ -52,11 +55,14 @@ export class WordList extends React.Component<{}, State> {
   }
 
   public render(): JSX.Element {
-    const words = ["共同募金", "同音異義", "金権体質", "義理人情", "質実剛健"]
-
-    const { selectedIndex } = this.state
+    const words = question1.blocks.map(block => block.word)
+    const { selectedBlockListIndex } = this.state
     const lis = words.map((word: string, ownWordIndex: number) => {
-      const wordElement = this.createWord(word, ownWordIndex, selectedIndex)
+      const wordElement = this.createWord(
+        word,
+        ownWordIndex,
+        selectedBlockListIndex
+      )
       return <li key={String(ownWordIndex)}>{wordElement}</li>
     })
     return <ul>{lis}</ul>

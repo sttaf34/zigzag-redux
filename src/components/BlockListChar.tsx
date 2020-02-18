@@ -1,19 +1,19 @@
 import * as React from "react"
-import { WordListIndex } from "../others/types"
+import { BlockListIndex } from "../others/types"
 
-export interface WordListCharProps {
+export interface BlockListCharProps {
   label: string
   ownWordIndex: number
   ownCharIndex: number
-  tapWordList: (selectedIndex: WordListIndex) => void
+  tapWordList: (selectedIndex: BlockListIndex) => void
 }
 
-export const WordListChar: React.FC<WordListCharProps> = (
-  props: WordListCharProps
+export const BlockListChar: React.FC<BlockListCharProps> = (
+  props: BlockListCharProps
 ) => {
   const { label, ownWordIndex, ownCharIndex, tapWordList } = props
-  const newSelectedIndex: WordListIndex = {
-    word: ownWordIndex,
+  const newSelectedIndex: BlockListIndex = {
+    block: ownWordIndex,
     char: ownCharIndex
   }
   return (
