@@ -32,21 +32,14 @@ export class BlockList extends React.Component<{}, State> {
       const selectedWordIndex = selectedBlockListIndex.block
       const selectedCharIndex = selectedBlockListIndex.char
       const key = `${ownWordIndex}_${index}`
-      if (ownWordIndex === selectedWordIndex && index === selectedCharIndex) {
-        return (
-          <BlockListChar
-            label={char}
-            ownWordIndex={ownWordIndex}
-            ownCharIndex={index}
-            key={key}
-          />
-        )
-      }
+      const isSelected =
+        ownWordIndex === selectedWordIndex && index === selectedCharIndex
       return (
         <BlockListChar
           label={char}
           ownWordIndex={ownWordIndex}
           ownCharIndex={index}
+          isSelected={isSelected}
           key={key}
         />
       )

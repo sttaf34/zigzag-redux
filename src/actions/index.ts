@@ -13,7 +13,7 @@ export interface GameAction {
   }
 }
 
-export const tapWordList = (
+export const tapBlockList = (
   selectedBlockListIndex: BlockListIndex
 ): GameAction => ({
   type: GameActionType.TAP_BLOCKLIST,

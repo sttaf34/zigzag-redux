@@ -1,4 +1,4 @@
-import { BoardIndex, Question } from "./types"
+import { BoardIndex, Question, BlockListIndex } from "./types"
 
 export const convertToBoard = (
   question: Question,
@@ -19,4 +19,32 @@ export const convertToBoard = (
     }
   }
   return board
+}
+
+export const isSame = (indexA: BoardIndex, indexB: BoardIndex): boolean => {
+  return indexA.x === indexB.x && indexA.y === indexB.y
+}
+
+export const getSelectedChar = (
+  question: Question,
+  selectedBlockListIndex: BlockListIndex
+): string => {
+  const block = question.blocks[selectedBlockListIndex.block]
+  return block.word[selectedBlockListIndex.char]
+}
+
+export const getCharOnBoard = (
+  question: Question,
+  blockListIndexes: (BoardIndex | null)[][],
+  tappedBoardIndex: BoardIndex
+): string => {
+  for (let i = 0; i < blockListIndexes.length; i += 1) {
+    for (let j = 0; j < question.wordSize; j += 1) {
+      const boardIndex = blockListIndexes[i][j]
+      if (boardIndex !== null && isSame(boardIndex, tappedBoardIndex)) {
+        return question.blocks[i].word[j]
+      }
+    }
+  }
+  return ""
 }

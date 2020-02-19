@@ -5,23 +5,28 @@ export interface BlockListCharProps {
   label: string
   ownWordIndex: number
   ownCharIndex: number
-  tapWordList: (selectedIndex: BlockListIndex) => void
+  isSelected: boolean
+  tapBlockList: (selectedIndex: BlockListIndex) => void
 }
 
 export const BlockListChar: React.FC<BlockListCharProps> = (
   props: BlockListCharProps
 ) => {
-  const { label, ownWordIndex, ownCharIndex, tapWordList } = props
+  const { label, ownWordIndex, ownCharIndex, tapBlockList, isSelected } = props
   const newSelectedIndex: BlockListIndex = {
     block: ownWordIndex,
     char: ownCharIndex
   }
+
+  const style = isSelected ? { backgroundColor: "#eeddcc" } : {}
+
   return (
     <>
       <button
+        style={style}
         type="button"
         onClick={(): void => {
-          tapWordList(newSelectedIndex)
+          tapBlockList(newSelectedIndex)
         }}
       >
         {label}

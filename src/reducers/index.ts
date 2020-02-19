@@ -1,6 +1,8 @@
 import { Reducer } from "redux"
 import { GameAction, GameActionType } from "../actions"
 import { BlockListIndex, BoardIndex } from "../others/types"
+import { isSame, getSelectedChar, getCharOnBoard } from "../others/utilities"
+import { question1 } from "../others/questions"
 
 export interface GameState {
   selectedBlockListIndex: BlockListIndex
@@ -20,26 +22,29 @@ const reduceOnTapBoard = (
     ...state.blockListIndexes
   )
   const noNullBoardIndexes = boardIndexes.filter(isNotNull)
-  const isEmptyOnBoard = noNullBoardIndexes.some(boardIndex => {
-    return (
-      tappedBoardIndex.x === boardIndex.x && tappedBoardIndex.y === boardIndex.y
-    )
+  const isFilledOnBoard = noNullBoardIndexes.some(boardIndex => {
+    return isSame(boardIndex, tappedBoardIndex)
   })
 
-  // 埋まっている場合は無効
-  if (!isEmptyOnBoard) {
+  // 選択中文字と盤面文字が同じかどうかのチェック
+  const selectedChar = getSelectedChar(question1, state.selectedBlockListIndex)
+  const tappedChar = getCharOnBoard(
+    question1,
+    state.blockListIndexes,
+    tappedBoardIndex
+  )
+  if (isFilledOnBoard && selectedChar !== tappedChar) {
     return state
   }
 
-  // 空いているので埋める
-  const {
-    selectedBlockListIndex: { block, char }
-  } = state
-  const copiedWordList = [...state.blockListIndexes]
-  copiedWordList[block][char] = tappedBoardIndex
+  // 埋める
+  const { selectedBlockListIndex } = state
+  const { block, char } = selectedBlockListIndex
+  const copiedBlockListIndexes = [...state.blockListIndexes]
+  copiedBlockListIndexes[block][char] = tappedBoardIndex
   return {
     ...state,
-    blockListIndexes: copiedWordList
+    blockListIndexes: copiedBlockListIndexes
   }
 }
 
