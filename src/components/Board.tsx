@@ -1,10 +1,27 @@
 import * as React from "react"
+import styled from "@emotion/styled"
 
 import BoardChar from "../containers/BoardChar"
 import { BoardIndex } from "../others/types"
 import { store } from "../others/store"
 import { question1 } from "../others/questions"
 import { convertToBoard } from "../others/utilities"
+
+const StyledTable = styled.table({
+  marginTop: 20,
+  width: "100%",
+  borderCollapse: "collapse",
+  border: "1px solid gray",
+
+  "& > tbody > tr > td": {
+    border: "1px solid gray",
+    textAlign: "center",
+    verticalAlign: "middle",
+    position: "relative",
+    fontSize: "10vw",
+    padding: "7px 0 1px 0"
+  }
+})
 
 interface State {
   blockListIndexes: (BoardIndex | null)[][]
@@ -45,9 +62,9 @@ export class Board extends React.Component<{}, State> {
 
     return (
       <>
-        <table>
+        <StyledTable>
           <tbody>{trs}</tbody>
-        </table>
+        </StyledTable>
       </>
     )
   }

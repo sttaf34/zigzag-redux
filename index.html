@@ -1,8 +1,37 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <title></title>
-    <body>
-      <div id="root"></div>
-      <script src="./src/index.tsx"></script>
-    </body>
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>漢字ジグザグ</title>
+  <style type="text/css">
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  div#root {
+    width: 100vw;
+    height: 100%;
+    padding: 15px;
+  }
+  @media screen and (min-width: 500px) {
+    div#root {
+      width: 500px;
+      margin: 0 auto;
+    }
+  }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="./src/index.tsx"></script>
+</body>
 </html>

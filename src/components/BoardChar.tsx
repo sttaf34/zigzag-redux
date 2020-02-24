@@ -1,5 +1,17 @@
 import * as React from "react"
+import styled from "@emotion/styled"
+
 import { BoardIndex } from "../others/types"
+
+const StyledButton = styled.button({
+  fontSize: "1em",
+  "& span.number": {
+    position: "absolute",
+    top: 0,
+    left: 2,
+    fontSize: "4vw"
+  }
+})
 
 export interface BoardCharProps {
   label: string
@@ -16,14 +28,14 @@ export const BoardChar: React.FC<BoardCharProps> = (props: BoardCharProps) => {
   }
   return (
     <>
-      <button
+      <StyledButton
         type="button"
         onClick={(): void => {
           tapBoard(boardIndex)
         }}
       >
         {label}
-      </button>
+      </StyledButton>
     </>
   )
 }
